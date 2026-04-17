@@ -67,10 +67,26 @@ uv run python evals/judge.py --tag round-0
 uv run --with tiktoken python evals/measure.py --tag round-0
 ```
 
-Use a small model to keep it cheap:
+Use a small model for generation, opus for judging:
 
 ```bash
-CAVEMAN_EVAL_MODEL=claude-haiku-4-5 uv run python evals/llm_run.py --tag round-0
+CAVEMAN_EVAL_MODEL=claude-sonnet-4-6 uv run python evals/llm_run.py --tag round-0
+CAVEMAN_JUDGE_MODEL=claude-opus-4-6 uv run python evals/judge.py --tag round-0
+```
+
+Judge defaults to `claude-opus-4-6` for consistent scoring. Generation
+model is configurable via `CAVEMAN_EVAL_MODEL`.
+
+### Committed baselines
+
+Run baselines once per model and commit them so every iteration starts
+from a fixed reference:
+
+```bash
+CAVEMAN_EVAL_MODEL=claude-sonnet-4-6 uv run python evals/llm_run.py --tag baseline-sonnet-4-6
+uv run python evals/judge.py --tag baseline-sonnet-4-6
+uv run --with tiktoken python evals/measure.py --tag baseline-sonnet-4-6
+git add evals/snapshots/baseline-*/ && git commit -m "evals: add baseline for sonnet-4-6"
 ```
 
 ### Compare before/after changes

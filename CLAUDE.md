@@ -191,8 +191,8 @@ Honest delta = **skill vs terse**, not skill vs baseline. Baseline comparison co
 
 | Script | What it does | API calls? |
 |--------|-------------|-----------|
-| `llm_run.py --tag <tag>` | Generate outputs for all arms, save to `evals/snapshots/<tag>/results.json` | Yes — `claude -p` |
-| `judge.py --tag <tag>` | Score quality (completeness/correctness/actionability 1-5) per skill vs baseline | Yes — `claude -p` |
+| `llm_run.py --tag <tag>` | Generate outputs for all arms, save to `evals/snapshots/<tag>/results.json` | Yes — `claude -p` (`CAVEMAN_EVAL_MODEL`) |
+| `judge.py --tag <tag>` | Score quality (completeness/correctness/actionability 1-5) per skill vs baseline | Yes — `claude -p` (`CAVEMAN_JUDGE_MODEL`, default opus) |
 | `measure.py --tag <tag>` | Count tokens, combine with judge scores, write `summary.json` | No — offline |
 
 `--tag` is required for all scripts.

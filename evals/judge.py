@@ -16,7 +16,7 @@ Requires:
 Run: uv run python evals/judge.py --tag round-0
 
 Environment:
-  CAVEMAN_EVAL_MODEL    optional --model flag value passed through to claude
+  CAVEMAN_JUDGE_MODEL   model for judging (default: claude-opus-4-6)
   CAVEMAN_EVAL_WORKERS  parallel workers (default: 2)
 """
 
@@ -32,18 +32,44 @@ from pathlib import Path
 EVALS = Path(__file__).parent
 RESULTS_DIR = EVALS / "snapshots"
 DEFAULT_WORKERS = 2
+DEFAULT_JUDGE_MODEL = "claude-opus-4-6"
 MAX_RETRIES = 3
 RETRY_DELAYS = [5, 10, 20]
 
-JUDGE_SYSTEM = """You are an expert technical reviewer. You will be given a reference answer and a compressed answer to the same programming question.
+JUDGE_SYSTEM = """You are an expert technical reviewer scoring a compressed answer against a reference.
 
-The compressed answer is intentionally brief — it uses a terse writing style to reduce token count. Do NOT penalize brevity itself. Score based on whether all the essential technical content is preserved, not on length or detail parity. Dropped filler, examples, and verbose explanations are fine as long as the core information a developer needs is still there.
+The compressed answer intentionally uses terse prose to reduce token count. Do NOT penalize brevity. Score only on whether essential technical substance is preserved.
 
-You must score the compressed answer on three dimensions (1-5 each):
+## Scoring rubric
 
-- completeness: Are the essential technical points preserved? 5 = all key information a developer needs is present, 1 = critical information missing that would leave a developer stuck.
-- correctness: Is everything stated technically accurate? 5 = fully correct, 1 = contains serious errors or misleading claims.
-- actionability: Could a developer solve their problem with this answer alone? 5 = fully actionable, 1 = useless without additional research.
+### completeness (1-5)
+- 5: Every key technical concept, step, or recommendation from the reference is present or clearly implied. Nothing a developer would need is missing.
+- 4: One minor point omitted (e.g. an edge case, a secondary alternative) but all primary information intact.
+- 3: Two or more minor points missing, OR one moderately important point missing. Developer could still mostly solve their problem.
+- 2: A significant technical concept is missing that would cause the developer to get stuck or make a mistake.
+- 1: Most substantive content is gone. Answer is too skeletal to be useful.
+
+### correctness (1-5)
+- 5: Every technical claim is accurate. No errors, no misleading simplifications.
+- 4: One minor inaccuracy that would not cause harm (e.g. slightly wrong default value, imprecise terminology).
+- 3: One meaningful error OR multiple minor inaccuracies. Developer might waste time debugging.
+- 2: A significant technical error that would lead to broken code or wrong architecture decisions.
+- 1: Fundamentally wrong answer. Following it would make things worse.
+
+### actionability (1-5)
+- 5: A developer can solve their problem using only this answer. Clear next steps, enough detail to implement.
+- 4: Developer can solve their problem but may need to look up one minor detail (e.g. exact API syntax).
+- 3: Answer points in the right direction but developer needs significant additional research to implement.
+- 2: Answer is too vague or abstract to act on without substantial outside help.
+- 1: Answer does not help the developer make progress on their problem.
+
+## Rules
+- Compare ONLY technical substance, not style or length.
+- A short answer that covers all key points scores 5 on completeness.
+- Omitted examples, analogies, or verbose explanations are NOT completeness losses.
+- The compressed answer may use broken grammar (dropped articles, sentence fragments like "Pool reuse open DB conn"). This is intentional style, not a correctness error.
+- Standard abbreviations (DB, auth, config, req, res, fn, impl) are equivalent to their full forms. Do not penalize.
+- If the reference answer itself contains errors, do not penalize the compressed answer for omitting them.
 
 Respond with ONLY a valid JSON object, no other text:
 {"completeness": N, "correctness": N, "actionability": N}"""
@@ -51,10 +77,8 @@ Respond with ONLY a valid JSON object, no other text:
 
 async def run_claude(prompt: str, system: str, semaphore: asyncio.Semaphore) -> str:
     """Call claude CLI with a prompt and system prompt."""
-    cmd = ["claude", "-p", "--system-prompt", system]
-    if model := os.environ.get("CAVEMAN_EVAL_MODEL"):
-        cmd += ["--model", model]
-    cmd.append(prompt)
+    model = os.environ.get("CAVEMAN_JUDGE_MODEL", DEFAULT_JUDGE_MODEL)
+    cmd = ["claude", "-p", "--model", model, "--system-prompt", system, prompt]
 
     last_err = ""
     async with semaphore:
@@ -153,17 +177,18 @@ async def async_main(args: argparse.Namespace) -> None:
     n_prompts = len(prompts)
     total = len(skills) * n_prompts
     semaphore = asyncio.Semaphore(args.workers)
+    judge_model = os.environ.get("CAVEMAN_JUDGE_MODEL", DEFAULT_JUDGE_MODEL)
 
     print(
         f"=== Judging {len(skills)} skills × {n_prompts} prompts = {total} calls "
-        f"({args.workers} workers) ===",
+        f"({args.workers} workers, model: {judge_model}) ===",
         flush=True,
     )
 
     judge_data: dict = {
         "metadata": {
             "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-            "model": os.environ.get("CAVEMAN_EVAL_MODEL", "default"),
+            "judge_model": judge_model,
             "source_results": str(results_path),
             "tag": args.tag,
         },
