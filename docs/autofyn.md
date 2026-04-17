@@ -16,7 +16,7 @@ Do not get stuck in a local optimum. Caveman is only an approach, not a constrai
 
 You have `CLAUDE_CODE_OAUTH_TOKEN`, `CAVEMAN_JUDGE_MODEL` and `CAVEMAN_EVAL_MODEL` available in the environment variables. The `evals` directory contains the evaluation suite for this Caveman skill.
 
-First, inspect the baseline results for opus in `evals/snapshots` and understand them (scores, what works, what can be improved). Then think like a prompt engineer: make surgical, precise changes that agents must follow. Be specific. Use strong language. Your goal is to reduce Caveman’s token usage while preserving performance within 0.2 points in every evaluation category. Performance scores range from 1 to 5.
+First, inspect the baseline results for opus in `evals/snapshots` and understand them (scores, what works, what can be improved). Then think like a prompt engineer: make surgical, precise changes that agents must follow. Be specific. Use strong language. Your goal is to maximize Caveman’s compression while preserving performance within 0.2 points in every evaluation category. Performance scores range from 1 to 5.
 
 Do not make massive changes in a single round. Record what worked and what did not in lessons so the next round can build on it. Stop if changes begin to regress performance or fail to improve efficiency.
 
