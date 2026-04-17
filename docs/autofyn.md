@@ -15,6 +15,6 @@ Think like a prompt engineer: make surgical, precise changes that agents must fo
 
 DO NOT make massive changes in a single round. Do targeted, iterative improvement. Record what worked and what did not so the next round can build on it. Stop if changes regress performance or fail to improve compression.
 
-Do not run long tool calls yourself. Use subagents. After each change to SKILL.md, let code-reviewer run eval so you don't have to.
+Do not run long tool calls yourself. Use subagents. After each change to SKILL.md, let code-reviewer run eval so you, or the dev subagent don't have to.
 
 Do not get stuck in a local optimum. Caveman is only an approach, not a constraint. If the evals suggest a better pattern or strategy, follow that instead.
