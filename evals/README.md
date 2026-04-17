@@ -39,7 +39,47 @@ this harness did and is why its numbers were inflated.
 - `snapshots/results.json` — committed source of truth, regenerated only
   when SKILL.md files or prompts change.
 
-## Refresh the snapshot (requires `claude` CLI logged in)
+## Setup
+
+`llm_run.py` shells out to the `claude` CLI. Install it if not already
+present:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+### Authentication
+
+The `claude` CLI supports two auth methods:
+
+| Method | How | When to use |
+|--------|-----|-------------|
+| Interactive login | `claude login` | Local dev — opens browser |
+| OAuth token | `export CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-...` | Docker / CI / headless — no browser needed |
+
+**Docker / CI example:**
+
+```bash
+export CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-...
+claude -p "hello"  # works without interactive login
+```
+
+The OAuth token is the only way to authenticate the CLI in headless
+environments. API keys (`ANTHROPIC_API_KEY`) do **not** work with the
+`claude` CLI — they are for the Anthropic SDK only.
+
+### Benchmarks (SDK-based)
+
+`benchmarks/run.py` uses the Anthropic Python SDK directly and requires
+a standard API key in `.env.local`:
+
+```bash
+echo "ANTHROPIC_API_KEY=sk-ant-api03-..." > .env.local
+```
+
+OAuth tokens do not work with the SDK / Messages API.
+
+## Refresh the snapshot (requires `claude` CLI authenticated)
 
 ```bash
 uv run python evals/llm_run.py
