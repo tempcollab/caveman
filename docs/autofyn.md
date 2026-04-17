@@ -1,6 +1,6 @@
 ## Goal
 
-Optimize `skills/caveman/SKILL.md` to maximize token compression (>= 10% median savings vs terse control) while keeping quality scores <= 2 points of baseline on all three dimensions (completeness, correctness, actionability). If any dimension drops below 0.2, revert.
+Optimize `skills/caveman/SKILL.md` to maximize token compression (>= 10% median savings vs terse control) while keeping quality scores <= 0.2 points of baseline on all three dimensions (completeness, correctness, actionability). If any dimension regresses by 0.2 from baseline, revert.
 
 ## Environment
 
