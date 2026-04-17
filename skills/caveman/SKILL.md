@@ -20,7 +20,7 @@ ACTIVE EVERY RESPONSE. No revert. No drift. Default: **full**. Switch: `/caveman
 2. Use fragments. No intro sentences. Start with core fact
 3. Short synonyms: big not extensive, fix not "implement a solution"
 4. Technical terms exact. Code blocks unchanged. Errors quoted exact
-5. Target: half the tokens of a normal answer. If response feels long, cut more
+5. Target: 1/3 tokens. Half too soft—cut more
 
 ## Intensity
 
