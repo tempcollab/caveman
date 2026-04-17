@@ -180,18 +180,56 @@ For agents without hook systems, minimal always-on snippet lives in README under
 
 ## Evals
 
-`evals/` has three-arm harness:
+`evals/` has three-arm harness measuring **compression and quality**:
 - `__baseline__` — no system prompt
 - `__terse__` — `Answer concisely.`
 - `<skill>` — `Answer concisely.\n\n{SKILL.md}`
 
 Honest delta = **skill vs terse**, not skill vs baseline. Baseline comparison conflates skill with generic terseness — that cheating. Harness designed to prevent this.
 
-`llm_run.py` calls `claude -p --system-prompt ...` per (prompt, arm), saves to `evals/snapshots/results.json`. `measure.py` reads snapshot offline with tiktoken (OpenAI BPE — approximates Claude tokenizer, ratios meaningful, absolute numbers approximate).
+### Scripts
+
+| Script | What it does | API calls? |
+|--------|-------------|-----------|
+| `llm_run.py --tag <tag>` | Generate outputs for all arms, save to `evals/snapshots/<tag>/results.json` | Yes — `claude -p` |
+| `judge.py --tag <tag>` | Score quality (completeness/correctness/actionability 1-5) per skill vs baseline | Yes — `claude -p` |
+| `measure.py --tag <tag>` | Count tokens, combine with judge scores, write `summary.json` | No — offline |
+
+`--tag` is required for all scripts.
+
+### Results directory
+
+Tagged runs save to `evals/snapshots/<tag>/`:
+```
+evals/snapshots/<tag>/
+  ├── results.json    # raw LLM outputs
+  ├── judge.json      # quality scores
+  └── summary.json    # combined compression + quality stats
+```
+
+### Workflow (AutoFyn / iterative improvement)
+
+```bash
+# Before changes
+uv run python evals/llm_run.py --tag before
+uv run python evals/judge.py --tag before
+uv run --with tiktoken python evals/measure.py --tag before
+
+# Edit skills/caveman/SKILL.md
+
+# After changes
+uv run python evals/llm_run.py --tag after
+uv run python evals/judge.py --tag after
+uv run --with tiktoken python evals/measure.py --tag after
+```
+
+Success = compression up + quality scores ≥ 4. Quality below 3 = skill too aggressive, revert.
+
+### Auth in Docker / CI
+
+`claude` CLI supports OAuth: `export CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-...`. No interactive login needed. API keys do NOT work with the CLI.
 
 Add skill: drop `skills/<name>/SKILL.md`. Harness auto-discovers. Add prompt: append line to `evals/prompts/en.txt`.
-
-Snapshots committed to git. CI reads without API calls. Only regenerate when SKILL.md or prompts change.
 
 ---
 

@@ -394,10 +394,13 @@ The `evals/` directory has a three-arm eval harness that measures real token com
 
 ```bash
 # Run the eval (needs claude CLI)
-uv run python evals/llm_run.py
+uv run python evals/llm_run.py --tag my-run
+
+# Judge quality (completeness, correctness, actionability)
+uv run python evals/judge.py --tag my-run
 
 # Read results (no API key, runs offline)
-uv run --with tiktoken python evals/measure.py
+uv run --with tiktoken python evals/measure.py --tag my-run
 ```
 
 ## Star This Repo

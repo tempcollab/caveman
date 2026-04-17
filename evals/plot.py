@@ -2,15 +2,16 @@
 Generate a boxplot showing the distribution of token compression per
 skill, compared against a plain "Answer concisely." control.
 
-Reads evals/snapshots/results.json and writes:
-  - evals/snapshots/results.html  (interactive plotly)
-  - evals/snapshots/results.png   (static export for README/PR embed)
+Reads evals/snapshots/<tag>/results.json and writes:
+  - evals/snapshots/<tag>/results.html  (interactive plotly)
+  - evals/snapshots/<tag>/results.png   (static export for README/PR embed)
 
-Run: uv run --with tiktoken --with plotly --with kaleido python evals/plot.py
+Run: uv run --with tiktoken --with plotly --with kaleido python evals/plot.py --tag round-0
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import statistics
 from pathlib import Path
@@ -19,17 +20,31 @@ import plotly.graph_objects as go
 import tiktoken
 
 ENCODING = tiktoken.get_encoding("o200k_base")
-SNAPSHOT = Path(__file__).parent / "snapshots" / "results.json"
-HTML_OUT = Path(__file__).parent / "snapshots" / "results.html"
-PNG_OUT = Path(__file__).parent / "snapshots" / "results.png"
+EVALS = Path(__file__).parent
+RESULTS_DIR = EVALS / "snapshots"
 
 
 def count(text: str) -> int:
+    """Count tokens in a string using tiktoken."""
     return len(ENCODING.encode(text))
 
 
 def main() -> None:
-    data = json.loads(SNAPSHOT.read_text())
+    """Generate compression boxplot from eval results."""
+    parser = argparse.ArgumentParser(description="Plot eval results")
+    parser.add_argument(
+        "--tag",
+        required=True,
+        help="Run tag (e.g. round-0). Reads from evals/snapshots/<tag>/",
+    )
+    args = parser.parse_args()
+
+    results_path = RESULTS_DIR / args.tag / "results.json"
+    if not results_path.exists():
+        print(f"No results at {results_path}. Run llm_run.py first.")
+        return
+
+    data = json.loads(results_path.read_text())
     arms = data["arms"]
     meta = data.get("metadata", {})
 
@@ -48,7 +63,7 @@ def main() -> None:
             {"skill": skill, "savings": savings, "median": statistics.median(savings)}
         )
 
-    rows.sort(key=lambda r: -r["median"])  # best first
+    rows.sort(key=lambda r: -r["median"])
 
     fig = go.Figure()
 
@@ -68,7 +83,6 @@ def main() -> None:
             )
         )
 
-    # zero line — "no effect"
     fig.add_hline(
         y=0,
         line=dict(color="black", width=1.5, dash="dash"),
@@ -77,7 +91,6 @@ def main() -> None:
         annotation_font=dict(size=11, color="black"),
     )
 
-    # median labels above each box
     for row in rows:
         fig.add_annotation(
             x=row["skill"],
@@ -129,7 +142,6 @@ def main() -> None:
         ],
     )
 
-    # re-add labels after update_layout (which would otherwise wipe them)
     for row in rows:
         fig.add_annotation(
             x=row["skill"],
@@ -140,10 +152,12 @@ def main() -> None:
             font=dict(size=16, color="#2c3e50"),
         )
 
-    fig.write_html(HTML_OUT)
-    print(f"Wrote {HTML_OUT}")
-    fig.write_image(PNG_OUT, scale=2)
-    print(f"Wrote {PNG_OUT}")
+    html_out = RESULTS_DIR / args.tag / "results.html"
+    png_out = RESULTS_DIR / args.tag / "results.png"
+    fig.write_html(html_out)
+    print(f"Wrote {html_out}")
+    fig.write_image(png_out, scale=2)
+    print(f"Wrote {png_out}")
 
 
 if __name__ == "__main__":

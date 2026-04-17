@@ -1,8 +1,8 @@
 # Evals
 
-Measures real token compression of caveman skills by running the same
-prompts through Claude Code under three conditions and comparing the
-generated output token counts.
+Measures real token compression **and quality** of caveman skills by
+running the same prompts through Claude Code under three conditions,
+comparing output token counts, and scoring with an LLM judge.
 
 ## The three arms
 
@@ -15,34 +15,12 @@ generated output token counts.
 The honest delta for any skill is **`<skill>` vs `__terse__`** — i.e.
 how much the skill itself adds on top of a plain "be terse" instruction.
 Comparing a skill to the no-system-prompt baseline conflates the skill
-with the generic terseness ask, which is what an earlier version of
-this harness did and is why its numbers were inflated.
-
-## Why this design
-
-- **Real LLM output**, not hand-written examples (no circularity).
-- **Same Claude Code** the skills target — no separate API key.
-- **Snapshot committed to git** so CI runs are deterministic and free,
-  and so any change to the numbers is reviewable as a diff.
-- **Control arm** isolates the skill's contribution from the generic
-  "be terse" effect.
-
-## Files
-
-- `prompts/en.txt` — fixed list of dev questions, one per line.
-- `llm_run.py` — runs `claude -p --system-prompt …` per (prompt, arm),
-  captures real LLM output, writes `snapshots/results.json` along with
-  metadata (model, CLI version, generation timestamp).
-- `measure.py` — reads the snapshot, counts tokens with tiktoken
-  `o200k_base`, prints a markdown table with median / mean / min / max /
-  stdev across prompts.
-- `snapshots/results.json` — committed source of truth, regenerated only
-  when SKILL.md files or prompts change.
+with the generic terseness ask.
 
 ## Setup
 
-`llm_run.py` shells out to the `claude` CLI. Install it if not already
-present:
+`llm_run.py` and `judge.py` shell out to the `claude` CLI. Install it
+if not already present:
 
 ```bash
 npm install -g @anthropic-ai/claude-code
@@ -50,75 +28,127 @@ npm install -g @anthropic-ai/claude-code
 
 ### Authentication
 
-The `claude` CLI supports two auth methods:
-
 | Method | How | When to use |
 |--------|-----|-------------|
 | Interactive login | `claude login` | Local dev — opens browser |
-| OAuth token | `export CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-...` | Docker / CI / headless — no browser needed |
+| OAuth token | `export CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-...` | Docker / CI / headless |
 
-**Docker / CI example:**
+### Benchmarks (SDK-based, separate)
 
-```bash
-export CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-...
-claude -p "hello"  # works without interactive login
+`benchmarks/run.py` uses the Anthropic Python SDK and requires a
+standard API key in `.env.local`. It gives exact token counts but costs
+real money. Run it occasionally, not every round.
+
+## Results directory
+
+Tagged runs are saved to `evals/snapshots/<tag>/`:
+
+```
+evals/snapshots/<tag>/
+  ├── results.json    # raw LLM outputs (llm_run.py)
+  ├── judge.json      # quality scores (judge.py)
+  └── summary.json    # combined stats (measure.py)
 ```
 
-The OAuth token is the only way to authenticate the CLI in headless
-environments. API keys (`ANTHROPIC_API_KEY`) do **not** work with the
-`claude` CLI — they are for the Anthropic SDK only.
+`--tag` is required for all scripts.
 
-### Benchmarks (SDK-based)
+## Workflow
 
-`benchmarks/run.py` uses the Anthropic Python SDK directly and requires
-a standard API key in `.env.local`:
+### Full eval with quality scoring
 
 ```bash
-echo "ANTHROPIC_API_KEY=sk-ant-api03-..." > .env.local
+# 1. Generate outputs
+uv run python evals/llm_run.py --tag round-0
+
+# 2. Judge quality (compares skill vs baseline)
+uv run python evals/judge.py --tag round-0
+
+# 3. Measure compression + quality
+uv run --with tiktoken python evals/measure.py --tag round-0
 ```
 
-OAuth tokens do not work with the SDK / Messages API.
-
-## Refresh the snapshot (requires `claude` CLI authenticated)
+Use a small model to keep it cheap:
 
 ```bash
-uv run python evals/llm_run.py
+CAVEMAN_EVAL_MODEL=claude-haiku-4-5 uv run python evals/llm_run.py --tag round-0
 ```
 
-This calls Claude once per prompt × (N skills + 2 control arms). Use
-a small model to keep it cheap:
+### Compare before/after changes
 
 ```bash
-CAVEMAN_EVAL_MODEL=claude-haiku-4-5 uv run python evals/llm_run.py
+# Before changes
+uv run python evals/llm_run.py --tag before
+uv run python evals/judge.py --tag before
+uv run --with tiktoken python evals/measure.py --tag before
+
+# Make changes to skills/caveman/SKILL.md
+
+# After changes
+uv run python evals/llm_run.py --tag after
+uv run python evals/judge.py --tag after
+uv run --with tiktoken python evals/measure.py --tag after
+
+# Compare summary.json files
 ```
 
-## Read the snapshot (no LLM, no API key, runs in CI)
+### AutoFyn / CI integration
+
+AutoFyn gives each run a tag (e.g. `round-1`, `round-2`). Results
+accumulate in `evals/snapshots/` so you can track improvement over time.
 
 ```bash
-uv run --with tiktoken python evals/measure.py
+# AutoFyn round loop
+uv run python evals/llm_run.py --tag round-$N
+uv run python evals/judge.py --tag round-$N
+uv run --with tiktoken python evals/measure.py --tag round-$N
+
+# Success criteria: compression up, quality scores stable
 ```
+
+## Files
+
+- `prompts/en.txt` — fixed list of dev questions, one per line.
+- `llm_run.py` — runs `claude -p --system-prompt …` per (prompt, arm),
+  captures real LLM output, writes results.json.
+- `judge.py` — pairwise quality judge. For each (prompt, skill), asks
+  Claude to score the compressed answer against the baseline on
+  completeness (1-5), correctness (1-5), and actionability (1-5).
+- `measure.py` — reads results.json + judge.json, counts tokens with
+  tiktoken, prints a markdown table with compression and quality stats.
+- `snapshots/<tag>/` — run results directory.
 
 ## Adding a prompt
 
-Append a line to `prompts/en.txt`, then refresh the snapshot.
+Append a line to `prompts/en.txt`, then run a new tagged eval.
 
 ## Adding a skill
 
-Drop a `skills/<name>/SKILL.md`, then refresh the snapshot. `llm_run.py`
-picks up every skill directory automatically.
+Drop a `skills/<name>/SKILL.md`. `llm_run.py` picks up every skill
+directory automatically.
+
+## Quality scoring
+
+The judge compares each skill output against the baseline on three
+dimensions:
+
+| Dimension | What it measures | 5 = best |
+|-----------|-----------------|----------|
+| Completeness | All key technical points covered? | Nothing important missing |
+| Correctness | Everything stated is accurate? | Fully correct |
+| Actionability | Developer can act on this? | Fully actionable |
+
+A good caveman skill should score 4+ on all three while maximizing
+token compression. If quality drops below 3, the skill is too aggressive.
 
 ## What this does NOT measure
 
-- **Fidelity** — does the compressed answer preserve the technical
-  claims? A skill that replies `k` to everything would score −99% and
-  "win". A future v2 could add a judge-model rubric.
-- **Latency or cost** — out of scope. Note that skills add input tokens
-  on every call, so output savings are not the full economic picture.
+- **Latency or cost** — skills add input tokens, so output savings are
+  not the full economic picture.
 - **Cross-model behavior** — only the model used to generate the
   snapshot is measured.
-- **Exact Claude tokens** — `tiktoken o200k_base` is OpenAI's BPE and is
-  only an approximation of Claude's tokenizer. Ratios between arms are
-  meaningful; absolute numbers are approximate.
-- **Statistical significance** — single run per (prompt, arm) at default
-  temperature. The min/max/stdev columns let you eyeball whether a
-  number is solid or noisy, but this is not a powered experiment.
+- **Exact Claude tokens** — `tiktoken o200k_base` is OpenAI's BPE and
+  is only an approximation. Ratios are meaningful; absolute numbers
+  approximate.
+- **Statistical significance** — single run per (prompt, arm). The
+  min/max columns let you eyeball noise, but this is not a powered
+  experiment.
