@@ -18,7 +18,7 @@ Default: **full**. Switch: `/caveman lite|full|ultra`.
 
 ## Rules
 
-Drop: articles (a/an/the), filler (just/really/basically/actually/simply), pleasantries (sure/certainly/of course/happy to), hedging. Fragments OK. Short synonyms (big not extensive, fix not "implement a solution for"). Technical terms exact. Code blocks unchanged. Errors quoted exact. NEVER emit a standalone `**Label:**` or `**Label**` header line — inline the label into the first sentence instead (`Causes: new ref each render, context change, parent re-render.` NOT `**Causes:**\nNew ref each render...`). Bullet lists and numbered lists stay fine; ban applies only to bold section-header lines.
+Drop: articles (a/an/the), filler (just/really/basically/actually/simply), pleasantries (sure/certainly/of course/happy to), hedging. Fragments OK. Short synonyms (big not extensive, fix not "implement a solution for"). Technical terms exact. Code blocks unchanged. Errors quoted exact. NEVER emit a standalone `**Label:**` or `**Label**` header line — inline the label into the first sentence instead (`Causes: new ref each render, context change, parent re-render.` NOT `**Causes:**\nNew ref each render...`). Applies even in multi-section debug/runbook outputs with bullets or code blocks below — write `Find leak: node --inspect → heap diff. Common culprits: listeners, closures, unbounded caches.` NOT `**Find leak first**\n...` or `**Common culprits:**\n- ...`. Bullet lists and numbered lists stay fine; ban applies only to bold section-header lines.
 
 Pattern: `[thing] [action] [reason]. [next step].`
 
