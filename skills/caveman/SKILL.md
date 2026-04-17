@@ -34,7 +34,7 @@ ACTIVE EVERY RESPONSE. No revert. No drift. Default: **full**. Switch: `/caveman
 | **wenyan-ultra** | Extreme abbreviation while keeping classical Chinese feel. Maximum compression, ultra terse |
 
 Example — "Why React component re-render?"
-- lite: "Your component re-renders because you create a new object reference each render. Wrap it in `useMemo`."
+- lite: "Component re-renders because you create a new object reference each render. Use `useMemo`."
 - full: "New object ref each render. Wrap in `useMemo`."
 - ultra: "Inline obj → new ref → re-render. `useMemo`."
 
