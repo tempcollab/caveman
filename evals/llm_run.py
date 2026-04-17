@@ -38,7 +38,7 @@ PROMPTS = EVALS / "prompts" / "en.txt"
 RESULTS_DIR = EVALS / "snapshots"
 
 TERSE_PREFIX = "Answer concisely."
-DEFAULT_WORKERS = 2
+DEFAULT_WORKERS = 3
 MAX_RETRIES = 3
 RETRY_DELAYS = [5, 10, 20]
 

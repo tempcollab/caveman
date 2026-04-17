@@ -31,7 +31,7 @@ from pathlib import Path
 
 EVALS = Path(__file__).parent
 RESULTS_DIR = EVALS / "snapshots"
-DEFAULT_WORKERS = 2
+DEFAULT_WORKERS = 3
 DEFAULT_JUDGE_MODEL = "claude-opus-4-6"
 MAX_RETRIES = 3
 RETRY_DELAYS = [5, 10, 20]
