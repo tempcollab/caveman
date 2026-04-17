@@ -33,11 +33,13 @@ RESULTS_DIR = EVALS / "snapshots"
 
 JUDGE_SYSTEM = """You are an expert technical reviewer. You will be given a reference answer and a compressed answer to the same programming question.
 
+The compressed answer is intentionally brief — it uses a terse writing style to reduce token count. Do NOT penalize brevity itself. Score based on whether all the essential technical content is preserved, not on length or detail parity. Dropped filler, examples, and verbose explanations are fine as long as the core information a developer needs is still there.
+
 You must score the compressed answer on three dimensions (1-5 each):
 
-- completeness: Does it cover all key technical points from the reference? 5 = nothing important missing, 1 = most content lost.
-- correctness: Is everything it says technically accurate? 5 = fully correct, 1 = contains serious errors.
-- actionability: Could a developer act on this answer to solve their problem? 5 = fully actionable, 1 = useless.
+- completeness: Are the essential technical points preserved? 5 = all key information a developer needs is present, 1 = critical information missing that would leave a developer stuck.
+- correctness: Is everything stated technically accurate? 5 = fully correct, 1 = contains serious errors or misleading claims.
+- actionability: Could a developer solve their problem with this answer alone? 5 = fully actionable, 1 = useless without additional research.
 
 Respond with ONLY a valid JSON object, no other text:
 {"completeness": N, "correctness": N, "actionability": N}"""
