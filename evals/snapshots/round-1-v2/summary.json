@@ -1,0 +1,79 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-18T02:08:53.289803+00:00",
+    "claude_cli_version": "2.1.109 (Claude Code)",
+    "model": "claude-opus-4-6",
+    "n_prompts": 10,
+    "terse_prefix": "Answer concisely.",
+    "git_sha": "da78735ad8e6",
+    "tag": "round-1-v2"
+  },
+  "has_quality_scores": true,
+  "skills": [
+    {
+      "skill": "caveman",
+      "median": 54,
+      "mean": 54,
+      "min": 30,
+      "max": 77,
+      "stdev": 17,
+      "skill_tokens": 1300,
+      "terse_tokens": 2792,
+      "completeness": 3.8,
+      "correctness": 4.9,
+      "actionability": 3.7
+    },
+    {
+      "skill": "caveman-commit",
+      "median": 4,
+      "mean": 8,
+      "min": -35,
+      "max": 52,
+      "stdev": 24,
+      "skill_tokens": 2531,
+      "terse_tokens": 2792,
+      "completeness": 4.9,
+      "correctness": 4.9,
+      "actionability": 4.7
+    },
+    {
+      "skill": "caveman-help",
+      "median": -19,
+      "mean": -12,
+      "min": -36,
+      "max": 24,
+      "stdev": 22,
+      "skill_tokens": 3131,
+      "terse_tokens": 2792,
+      "completeness": 4.8,
+      "correctness": 5,
+      "actionability": 4.9
+    },
+    {
+      "skill": "caveman-review",
+      "median": 10,
+      "mean": 10,
+      "min": -11,
+      "max": 42,
+      "stdev": 18,
+      "skill_tokens": 2579,
+      "terse_tokens": 2792,
+      "completeness": 4.8,
+      "correctness": 5,
+      "actionability": 4.6
+    },
+    {
+      "skill": "compress",
+      "median": 13,
+      "mean": 21,
+      "min": -17,
+      "max": 59,
+      "stdev": 24,
+      "skill_tokens": 2205,
+      "terse_tokens": 2792,
+      "completeness": 4.4,
+      "correctness": 5,
+      "actionability": 4.4
+    }
+  ]
+}
