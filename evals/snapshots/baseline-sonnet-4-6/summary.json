@@ -20,8 +20,11 @@
       "skill_tokens": 3231,
       "terse_tokens": 5803,
       "completeness": 39.1,
+      "completeness_bot3": 35,
       "correctness": 48,
-      "actionability": 41.6
+      "correctness_bot3": 41.7,
+      "actionability": 41.6,
+      "actionability_bot3": 36.7
     },
     {
       "skill": "caveman-commit",
@@ -33,8 +36,11 @@
       "skill_tokens": 4023,
       "terse_tokens": 5803,
       "completeness": 41.6,
+      "completeness_bot3": 35,
       "correctness": 48.5,
-      "actionability": 43.8
+      "correctness_bot3": 43.3,
+      "actionability": 43.8,
+      "actionability_bot3": 36.7
     },
     {
       "skill": "caveman-help",
@@ -46,8 +52,11 @@
       "skill_tokens": 4198,
       "terse_tokens": 5803,
       "completeness": 42.6,
+      "completeness_bot3": 35,
       "correctness": 46.5,
-      "actionability": 45.5
+      "correctness_bot3": 36.7,
+      "actionability": 45.5,
+      "actionability_bot3": 40
     },
     {
       "skill": "caveman-review",
@@ -59,8 +68,11 @@
       "skill_tokens": 3628,
       "terse_tokens": 5803,
       "completeness": 41.0,
+      "completeness_bot3": 36,
       "correctness": 47.7,
-      "actionability": 43.3
+      "correctness_bot3": 41.7,
+      "actionability": 43.3,
+      "actionability_bot3": 40
     },
     {
       "skill": "compress",
@@ -72,8 +84,11 @@
       "skill_tokens": 4866,
       "terse_tokens": 5803,
       "completeness": 43.9,
+      "completeness_bot3": 38.3,
       "correctness": 48.3,
-      "actionability": 46.1
+      "correctness_bot3": 45,
+      "actionability": 46.1,
+      "actionability_bot3": 41.7
     }
   ]
 }

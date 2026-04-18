@@ -118,8 +118,8 @@ def main() -> None:
 
     # Build table header based on whether judge scores exist
     if judge_scores:
-        print("| Skill | Median | Mean | Min | Max | Tokens | Comp | Corr | Action |")
-        print("|-------|--------|------|-----|-----|--------|------|------|--------|")
+        print("| Skill | Median | Mean | Min | Max | Tokens | Comp (↓3) | Corr (↓3) | Action (↓3) |")
+        print("|-------|--------|------|-----|-----|--------|-----------|-----------|-------------|")
     else:
         print(
             "| Skill | Median | Mean | Min | Max | Stdev | Tokens (skill / terse) |"
@@ -155,15 +155,12 @@ def main() -> None:
             scores = judge_scores[skill]
             valid = [s for s in scores if "error" not in s]
             if valid:
-                row_data["completeness"] = round(
-                    statistics.mean(s["completeness"] for s in valid), 1
-                )
-                row_data["correctness"] = round(
-                    statistics.mean(s["correctness"] for s in valid), 1
-                )
-                row_data["actionability"] = round(
-                    statistics.mean(s["actionability"] for s in valid), 1
-                )
+                for dim in ("completeness", "correctness", "actionability"):
+                    dim_scores = sorted(s[dim] for s in valid)
+                    row_data[dim] = round(statistics.mean(dim_scores), 1)
+                    row_data[f"{dim}_bot3"] = round(
+                        statistics.mean(dim_scores[:3]), 1
+                    )
 
         rows.append((med, row_data))
         summary_rows.append(row_data)
@@ -171,14 +168,17 @@ def main() -> None:
     for _, row in sorted(rows, key=lambda r: -r[0]):
         if judge_scores:
             comp = row.get("completeness", "–")
+            comp_b3 = row.get("completeness_bot3", "–")
             corr = row.get("correctness", "–")
+            corr_b3 = row.get("correctness_bot3", "–")
             act = row.get("actionability", "–")
+            act_b3 = row.get("actionability_bot3", "–")
             print(
                 f"| **{row['skill']}** | {fmt_pct(row['median'] / 100)} | "
                 f"{fmt_pct(row['mean'] / 100)} | {fmt_pct(row['min'] / 100)} | "
                 f"{fmt_pct(row['max'] / 100)} | "
                 f"{row['skill_tokens']} / {row['terse_tokens']} | "
-                f"{comp} | {corr} | {act} |"
+                f"{comp} ({comp_b3}) | {corr} ({corr_b3}) | {act} ({act_b3}) |"
             )
         else:
             print(
@@ -191,7 +191,7 @@ def main() -> None:
     print()
     print("_Savings = `1 - skill_tokens / terse_tokens` per prompt._")
     if judge_scores:
-        print("_Quality scores: 1-50 scale (50 = best). Comp=completeness, Corr=correctness, Action=actionability._")
+        print("_Quality scores: 1-50 scale (50 = best). Mean (↓3 = bottom 3 mean). Comp=completeness, Corr=correctness, Action=actionability._")
     print(
         f"_Source: {args.tag}. Refresh with `python evals/llm_run.py --tag {args.tag}`._"
     )
