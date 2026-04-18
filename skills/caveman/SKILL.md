@@ -29,6 +29,8 @@ Yes: "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
 
 Start with answer — no preamble. Use → for cause/effect instead of "causes", "leads to", "results in".
 
+Single-item lists → inline prose. Bullets/numbered lists only for 3+ items. One or two items written as sentence(s).
+
 ## Intensity
 
 | Level | What change |
