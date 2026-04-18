@@ -128,7 +128,7 @@ uv run --with tiktoken python evals/measure.py --tag round-$N
   captures real LLM output, writes results.json.
 - `judge.py` — pairwise quality judge. For each (prompt, skill), asks
   Claude to score the compressed answer against the baseline on
-  completeness (1-5), correctness (1-5), and actionability (1-5).
+  completeness (1-50), correctness (1-50), and actionability (1-50).
 - `measure.py` — reads results.json + judge.json, counts tokens with
   tiktoken, prints a markdown table with compression and quality stats.
 - `snapshots/<tag>/` — run results directory.
@@ -147,14 +147,14 @@ directory automatically.
 The judge compares each skill output against the baseline on three
 dimensions:
 
-| Dimension | What it measures | 5 = best |
-|-----------|-----------------|----------|
+| Dimension | What it measures | 50 = best |
+|-----------|-----------------|-----------|
 | Completeness | All key technical points covered? | Nothing important missing |
 | Correctness | Everything stated is accurate? | Fully correct |
 | Actionability | Developer can act on this? | Fully actionable |
 
-A good caveman skill should score 4+ on all three while maximizing
-token compression. If quality drops below 3, the skill is too aggressive.
+A good caveman skill should score 40+ on all three while maximizing
+token compression. If quality drops below 30, the skill is too aggressive.
 
 ## What this does NOT measure
 

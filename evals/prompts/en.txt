@@ -8,3 +8,13 @@ Why am I getting CORS errors in my browser console?
 What's the point of using a debouncer on a search input?
 How does git rebase differ from git merge?
 When should I use a queue vs a topic in messaging systems?
+What's the difference between a mutex and a semaphore?
+How do I set up SSH key authentication for GitHub?
+Why is my Docker container exiting immediately after starting?
+Explain how a B-tree index speeds up database queries.
+What are the tradeoffs between REST and GraphQL?
+How does JavaScript's event loop handle async operations?
+Why should I use parameterized queries instead of string concatenation for SQL?
+What happens during a TLS handshake?
+How do I profile a slow Python script to find the bottleneck?
+What's the difference between horizontal and vertical scaling?

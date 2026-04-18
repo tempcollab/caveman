@@ -192,7 +192,7 @@ Honest delta = **skill vs terse**, not skill vs baseline. Baseline comparison co
 | Script | What it does | API calls? |
 |--------|-------------|-----------|
 | `llm_run.py --tag <tag>` | Generate outputs for all arms, save to `evals/snapshots/<tag>/results.json` | Yes — `claude -p` (`CAVEMAN_EVAL_MODEL`) |
-| `judge.py --tag <tag>` | Score quality (completeness/correctness/actionability 1-5) per skill vs baseline | Yes — `claude -p` (`CAVEMAN_JUDGE_MODEL`, default opus) |
+| `judge.py --tag <tag>` | Score quality (completeness/correctness/actionability 1-50) per skill vs baseline | Yes — `claude -p` (`CAVEMAN_JUDGE_MODEL`, default opus) |
 | `measure.py --tag <tag>` | Count tokens, combine with judge scores, write `summary.json` | No — offline |
 
 `--tag` is required for all scripts.
@@ -223,7 +223,7 @@ uv run python evals/judge.py --tag after
 uv run --with tiktoken python evals/measure.py --tag after
 ```
 
-Success = compression up + quality scores ≥ 4. Quality below 3 = skill too aggressive, revert.
+Success = compression up + quality scores ≥ 40. Quality below 30 = skill too aggressive, revert.
 
 ### Auth in Docker / CI
 

@@ -4,9 +4,9 @@ Pairwise quality judge for caveman eval results.
 For each (prompt, skill) pair, asks Claude to compare the skill output
 against the baseline and score on three dimensions:
 
-  - completeness: did it cover all key points? (1-5)
-  - correctness: any wrong or misleading claims? (1-5)
-  - actionability: could a developer act on this answer? (1-5)
+  - completeness: did it cover all key points? (1-50)
+  - correctness: any wrong or misleading claims? (1-50)
+  - actionability: could a developer act on this answer? (1-50)
 
 Reads results.json (from llm_run.py), writes judge.json alongside it.
 
@@ -31,7 +31,7 @@ from pathlib import Path
 
 EVALS = Path(__file__).parent
 RESULTS_DIR = EVALS / "snapshots"
-DEFAULT_WORKERS = 3
+DEFAULT_WORKERS = 4
 DEFAULT_JUDGE_MODEL = "claude-opus-4-6"
 MAX_RETRIES = 3
 RETRY_DELAYS = [5, 10, 20]
@@ -40,32 +40,36 @@ JUDGE_SYSTEM = """You are an expert technical reviewer scoring a compressed answ
 
 The compressed answer intentionally uses terse prose to reduce token count. Do NOT penalize brevity. Score only on whether essential technical substance is preserved.
 
-## Scoring rubric
+## Scoring rubric (1-50 scale, use any integer)
 
-### completeness (1-5)
-- 5: Every key technical concept, step, or recommendation from the reference is present or clearly implied. Nothing a developer would need is missing.
-- 4: One minor point omitted (e.g. an edge case, a secondary alternative) but all primary information intact.
-- 3: Two or more minor points missing, OR one moderately important point missing. Developer could still mostly solve their problem.
-- 2: A significant technical concept is missing that would cause the developer to get stuck or make a mistake.
-- 1: Most substantive content is gone. Answer is too skeletal to be useful.
+### completeness (1-50)
+- 50: Every key technical concept, step, or recommendation from the reference is present or clearly implied. Nothing a developer would need is missing.
+- 45: All primary information intact, one very minor detail simplified.
+- 40: One minor point omitted (e.g. an edge case, a secondary alternative) but all primary information intact.
+- 35: One minor point omitted plus some useful context simplified away.
+- 30: Two or more minor points missing, OR one moderately important point missing. Developer could still mostly solve their problem.
+- 20: A significant technical concept is missing that would cause the developer to get stuck or make a mistake.
+- 10: Most substantive content is gone. Answer is too skeletal to be useful.
 
-### correctness (1-5)
-- 5: Every technical claim is accurate. No errors, no misleading simplifications.
-- 4: One minor inaccuracy that would not cause harm (e.g. slightly wrong default value, imprecise terminology).
-- 3: One meaningful error OR multiple minor inaccuracies. Developer might waste time debugging.
-- 2: A significant technical error that would lead to broken code or wrong architecture decisions.
-- 1: Fundamentally wrong answer. Following it would make things worse.
+### correctness (1-50)
+- 50: Every technical claim is accurate. No errors, no misleading simplifications.
+- 45: Fully correct but one claim slightly imprecise (not wrong, just less precise than reference).
+- 40: One minor inaccuracy that would not cause harm (e.g. slightly wrong default value, imprecise terminology).
+- 30: One meaningful error OR multiple minor inaccuracies. Developer might waste time debugging.
+- 20: A significant technical error that would lead to broken code or wrong architecture decisions.
+- 10: Fundamentally wrong answer. Following it would make things worse.
 
-### actionability (1-5)
-- 5: A developer can solve their problem using only this answer. Clear next steps, enough detail to implement.
-- 4: Developer can solve their problem but may need to look up one minor detail (e.g. exact API syntax).
-- 3: Answer points in the right direction but developer needs significant additional research to implement.
-- 2: Answer is too vague or abstract to act on without substantial outside help.
-- 1: Answer does not help the developer make progress on their problem.
+### actionability (1-50)
+- 50: A developer can solve their problem using only this answer. Clear next steps, enough detail to implement.
+- 45: Fully actionable, one trivial detail might need a quick lookup.
+- 40: Developer can solve their problem but may need to look up one minor detail (e.g. exact API syntax).
+- 30: Answer points in the right direction but developer needs significant additional research to implement.
+- 20: Answer is too vague or abstract to act on without substantial outside help.
+- 10: Answer does not help the developer make progress on their problem.
 
 ## Rules
 - Compare ONLY technical substance, not style or length.
-- A short answer that covers all key points scores 5 on completeness.
+- A short answer that covers all key points scores 50 on completeness.
 - Omitted examples, analogies, or verbose explanations are NOT completeness losses.
 - The compressed answer may use broken grammar (dropped articles, sentence fragments like "Pool reuse open DB conn"). This is intentional style, not a correctness error.
 - Standard abbreviations (DB, auth, config, req, res, fn, impl) are equivalent to their full forms. Do not penalize.
@@ -202,9 +206,7 @@ async def async_main(args: argparse.Namespace) -> None:
         for i, (prompt, baseline, compressed) in enumerate(
             zip(prompts, baseline_outputs, skill_outputs)
         ):
-            tasks.append(
-                judge_one(skill, i, prompt, baseline, compressed, semaphore)
-            )
+            tasks.append(judge_one(skill, i, prompt, baseline, compressed, semaphore))
 
     # Run all concurrently, semaphore limits parallelism
     done = 0

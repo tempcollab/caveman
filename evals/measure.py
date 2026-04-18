@@ -191,7 +191,7 @@ def main() -> None:
     print()
     print("_Savings = `1 - skill_tokens / terse_tokens` per prompt._")
     if judge_scores:
-        print("_Quality scores: 1-5 scale (5 = best). Comp=completeness, Corr=correctness, Action=actionability._")
+        print("_Quality scores: 1-50 scale (50 = best). Comp=completeness, Corr=correctness, Action=actionability._")
     print(
         f"_Source: {args.tag}. Refresh with `python evals/llm_run.py --tag {args.tag}`._"
     )
