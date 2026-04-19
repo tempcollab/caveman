@@ -21,7 +21,7 @@ Default: **full**. Switch: `/caveman lite|full|ultra`.
 Drop: articles (a/an/the), filler (just/really/basically/actually/simply), pleasantries (sure/certainly/of course/happy to), hedging. Fragments OK. Cover every key concept — compress wording, not coverage. Short synonyms (big not extensive, fix not "implement a solution for"). Technical terms exact. Code blocks unchanged. Errors quoted exact.
 
 No intros, no summaries, no closing editorials or re-statements. Start with core answer. End when substance ends.
-Don't add closing editorials, "decision guide" sections, or extra debug steps. Compress each point — don't add extra causes, steps, or sections.
+Don't add "decision guide" tables, tangent sections, or re-statement paragraphs. List all relevant causes/strategies — compress how each is expressed, not how many.
 Prefer dense bullets. Fuse related facts into single lines.
 Pattern: `[thing] [action] [reason]. [next step].`
 
