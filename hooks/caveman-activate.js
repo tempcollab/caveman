@@ -40,7 +40,7 @@ safeWriteFlag(flagPath, mode);
 const INDEPENDENT_MODES = new Set(['commit', 'review', 'compress']);
 
 if (INDEPENDENT_MODES.has(mode)) {
-  process.stdout.write('CAVEMAN MODE ACTIVE — level: ' + mode + '. Behavior defined by /caveman-' + mode + ' skill.');
+  process.stdout.write('CAVEMAN MODE ACTIVE. Level: ' + mode + '. Behavior defined by /caveman-' + mode + ' skill.');
   process.exit(0);
 }
 
@@ -88,12 +88,12 @@ if (skillContent) {
     return acc;
   }, []);
 
-  output = 'CAVEMAN MODE ACTIVE — level: ' + modeLabel + '\n\n' + filtered.join('\n');
+  output = 'CAVEMAN MODE ACTIVE. Level: ' + modeLabel + '\n\n' + filtered.join('\n');
 } else {
   // Fallback when SKILL.md is not found (standalone hook install without skills dir).
   // This is the minimum viable ruleset — better than nothing.
   output =
-    'CAVEMAN MODE ACTIVE — level: ' + modeLabel + '\n\n' +
+    'CAVEMAN MODE ACTIVE. Level: ' + modeLabel + '\n\n' +
     'Respond terse like smart caveman. All technical substance stay. Only fluff die.\n\n' +
     '## Persistence\n\n' +
     'ACTIVE EVERY RESPONSE. No revert after many turns. No filler drift. Still active if unsure. Off only: "stop caveman" / "normal mode".\n\n' +
