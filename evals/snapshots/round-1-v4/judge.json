@@ -1,0 +1,620 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-20T15:58:25.154275+00:00",
+    "judge_model": "claude-opus-4-6",
+    "source_results": "/home/agentuser/repo/evals/snapshots/round-1-v4/results.json",
+    "tag": "round-1-v4"
+  },
+  "scores": {
+    "caveman": [
+      {
+        "completeness": 28,
+        "correctness": 50,
+        "actionability": 38,
+        "prompt_index": 0
+      },
+      {
+        "completeness": 35,
+        "correctness": 48,
+        "actionability": 30,
+        "prompt_index": 1
+      },
+      {
+        "completeness": 42,
+        "correctness": 50,
+        "actionability": 42,
+        "prompt_index": 2
+      },
+      {
+        "completeness": 39,
+        "correctness": 45,
+        "actionability": 42,
+        "prompt_index": 3
+      },
+      {
+        "completeness": 40,
+        "correctness": 50,
+        "actionability": 35,
+        "prompt_index": 4
+      },
+      {
+        "completeness": 30,
+        "correctness": 50,
+        "actionability": 30,
+        "prompt_index": 5
+      },
+      {
+        "completeness": 42,
+        "correctness": 48,
+        "actionability": 43,
+        "prompt_index": 6
+      },
+      {
+        "completeness": 30,
+        "correctness": 50,
+        "actionability": 30,
+        "prompt_index": 7
+      },
+      {
+        "completeness": 40,
+        "correctness": 48,
+        "actionability": 42,
+        "prompt_index": 8
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 9
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 10
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 11
+      },
+      {
+        "completeness": 30,
+        "correctness": 42,
+        "actionability": 38,
+        "prompt_index": 12
+      },
+      {
+        "completeness": 33,
+        "correctness": 25,
+        "actionability": 38,
+        "prompt_index": 13
+      },
+      {
+        "completeness": 43,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 14
+      },
+      {
+        "completeness": 32,
+        "correctness": 50,
+        "actionability": 38,
+        "prompt_index": 15
+      },
+      {
+        "completeness": 35,
+        "correctness": 50,
+        "actionability": 42,
+        "prompt_index": 16
+      },
+      {
+        "completeness": 30,
+        "correctness": 30,
+        "actionability": 32,
+        "prompt_index": 17
+      },
+      {
+        "completeness": 38,
+        "correctness": 45,
+        "actionability": 42,
+        "prompt_index": 18
+      },
+      {
+        "completeness": 42,
+        "correctness": 48,
+        "actionability": 45,
+        "prompt_index": 19
+      }
+    ],
+    "caveman-commit": [
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 0
+      },
+      {
+        "completeness": 40,
+        "correctness": 50,
+        "actionability": 40,
+        "prompt_index": 1
+      },
+      {
+        "completeness": 48,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 2
+      },
+      {
+        "completeness": 37,
+        "correctness": 47,
+        "actionability": 43,
+        "prompt_index": 3
+      },
+      {
+        "completeness": 48,
+        "correctness": 50,
+        "actionability": 50,
+        "prompt_index": 4
+      },
+      {
+        "completeness": 35,
+        "correctness": 50,
+        "actionability": 42,
+        "prompt_index": 5
+      },
+      {
+        "completeness": 42,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 6
+      },
+      {
+        "completeness": 42,
+        "correctness": 50,
+        "actionability": 42,
+        "prompt_index": 7
+      },
+      {
+        "completeness": 48,
+        "correctness": 48,
+        "actionability": 48,
+        "prompt_index": 8
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 9
+      },
+      {
+        "completeness": 43,
+        "correctness": 50,
+        "actionability": 47,
+        "prompt_index": 10
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 11
+      },
+      {
+        "completeness": 42,
+        "correctness": 45,
+        "actionability": 45,
+        "prompt_index": 12
+      },
+      {
+        "completeness": 40,
+        "correctness": 45,
+        "actionability": 45,
+        "prompt_index": 13
+      },
+      {
+        "completeness": 42,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 14
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 15
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 43,
+        "prompt_index": 16
+      },
+      {
+        "completeness": 40,
+        "correctness": 40,
+        "actionability": 45,
+        "prompt_index": 17
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 50,
+        "prompt_index": 18
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 19
+      }
+    ],
+    "caveman-help": [
+      {
+        "completeness": 38,
+        "correctness": 50,
+        "actionability": 40,
+        "prompt_index": 0
+      },
+      {
+        "completeness": 37,
+        "correctness": 48,
+        "actionability": 42,
+        "prompt_index": 1
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 2
+      },
+      {
+        "completeness": 38,
+        "correctness": 50,
+        "actionability": 42,
+        "prompt_index": 3
+      },
+      {
+        "completeness": 40,
+        "correctness": 50,
+        "actionability": 40,
+        "prompt_index": 4
+      },
+      {
+        "completeness": 35,
+        "correctness": 25,
+        "actionability": 38,
+        "prompt_index": 5
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 6
+      },
+      {
+        "completeness": 30,
+        "correctness": 50,
+        "actionability": 35,
+        "prompt_index": 7
+      },
+      {
+        "completeness": 44,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 8
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 9
+      },
+      {
+        "completeness": 35,
+        "correctness": 50,
+        "actionability": 40,
+        "prompt_index": 10
+      },
+      {
+        "completeness": 42,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 11
+      },
+      {
+        "completeness": 38,
+        "correctness": 42,
+        "actionability": 43,
+        "prompt_index": 12
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 13
+      },
+      {
+        "completeness": 42,
+        "correctness": 48,
+        "actionability": 45,
+        "prompt_index": 14
+      },
+      {
+        "completeness": 38,
+        "correctness": 50,
+        "actionability": 43,
+        "prompt_index": 15
+      },
+      {
+        "completeness": 43,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 16
+      },
+      {
+        "completeness": 43,
+        "correctness": 48,
+        "actionability": 47,
+        "prompt_index": 17
+      },
+      {
+        "completeness": 42,
+        "correctness": 45,
+        "actionability": 47,
+        "prompt_index": 18
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 19
+      }
+    ],
+    "caveman-review": [
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 0
+      },
+      {
+        "completeness": 32,
+        "correctness": 50,
+        "actionability": 38,
+        "prompt_index": 1
+      },
+      {
+        "completeness": 48,
+        "correctness": 50,
+        "actionability": 50,
+        "prompt_index": 2
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 3
+      },
+      {
+        "completeness": 40,
+        "correctness": 50,
+        "actionability": 40,
+        "prompt_index": 4
+      },
+      {
+        "completeness": 35,
+        "correctness": 50,
+        "actionability": 35,
+        "prompt_index": 5
+      },
+      {
+        "completeness": 42,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 6
+      },
+      {
+        "completeness": 35,
+        "correctness": 45,
+        "actionability": 35,
+        "prompt_index": 7
+      },
+      {
+        "completeness": 42,
+        "correctness": 50,
+        "actionability": 47,
+        "prompt_index": 8
+      },
+      {
+        "completeness": 40,
+        "correctness": 47,
+        "actionability": 43,
+        "prompt_index": 9
+      },
+      {
+        "completeness": 42,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 10
+      },
+      {
+        "completeness": 35,
+        "correctness": 45,
+        "actionability": 40,
+        "prompt_index": 11
+      },
+      {
+        "completeness": 32,
+        "correctness": 48,
+        "actionability": 37,
+        "prompt_index": 12
+      },
+      {
+        "completeness": 32,
+        "correctness": 30,
+        "actionability": 38,
+        "prompt_index": 13
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 14
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 15
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 16
+      },
+      {
+        "completeness": 44,
+        "correctness": 45,
+        "actionability": 47,
+        "prompt_index": 17
+      },
+      {
+        "completeness": 30,
+        "correctness": 48,
+        "actionability": 40,
+        "prompt_index": 18
+      },
+      {
+        "completeness": 35,
+        "correctness": 50,
+        "actionability": 40,
+        "prompt_index": 19
+      }
+    ],
+    "compress": [
+      {
+        "completeness": 40,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 0
+      },
+      {
+        "completeness": 40,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 1
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 2
+      },
+      {
+        "completeness": 38,
+        "correctness": 45,
+        "actionability": 42,
+        "prompt_index": 3
+      },
+      {
+        "completeness": 44,
+        "correctness": 45,
+        "actionability": 45,
+        "prompt_index": 4
+      },
+      {
+        "completeness": 35,
+        "correctness": 30,
+        "actionability": 42,
+        "prompt_index": 5
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 6
+      },
+      {
+        "completeness": 40,
+        "correctness": 50,
+        "actionability": 40,
+        "prompt_index": 7
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 8
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 9
+      },
+      {
+        "completeness": 43,
+        "correctness": 47,
+        "actionability": 47,
+        "prompt_index": 10
+      },
+      {
+        "completeness": 42,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 11
+      },
+      {
+        "completeness": 35,
+        "correctness": 45,
+        "actionability": 40,
+        "prompt_index": 12
+      },
+      {
+        "completeness": 33,
+        "correctness": 43,
+        "actionability": 45,
+        "prompt_index": 13
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 14
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 50,
+        "prompt_index": 15
+      },
+      {
+        "completeness": 43,
+        "correctness": 48,
+        "actionability": 47,
+        "prompt_index": 16
+      },
+      {
+        "completeness": 42,
+        "correctness": 45,
+        "actionability": 43,
+        "prompt_index": 17
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 48,
+        "prompt_index": 18
+      },
+      {
+        "completeness": 45,
+        "correctness": 50,
+        "actionability": 45,
+        "prompt_index": 19
+      }
+    ]
+  }
+}
